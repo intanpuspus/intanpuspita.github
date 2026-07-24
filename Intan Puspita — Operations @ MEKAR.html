@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intan Puspita — Operations @ MEKAR</title>
+<meta name="description" content="Intan Puspita — Operations Supervisor in Indonesian fintech. Lending ops, workflow design, data integrity." />
+<meta property="og:title" content="Intan Puspita — Operations & Public Archaeology" />
+<meta property="og:description" content="Adaptive, curious, always learning. Operations supervisor by day, public archaeology explorer by passion." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Intan Puspita — Operations & Public Archaeology" />
+<meta name="twitter:description" content="Adaptive, curious, always learning. Operations supervisor by day, public archaeology explorer by passion." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+<script>
+  (function() {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+  })();
+</script>
+<style>
+  :root {
+    --sage-200: #c8dac0;  --sage-300: #a7c29b;  --sage-400: #89ab7c;
+    --sage-500: #6c8f62;  --sage-600: #54724d;
+    --pink-200: #f5c7c9;  --pink-300: #eda4a8;  --pink-400: #e08087;
+  }
+  [data-theme="light"] {
+    --bg: #f7f3ec; --surface: #ffffff; --border: #e6ddd0;
+    --text: #2a2a28; --text-soft: #5f5f5c; --muted: #8a8a85;
+    --accent: var(--sage-500); --accent-2: var(--pink-400);
+    --chip-bg: #edeee6; --chip-text: #3a4f35;
+  }
+  [data-theme="dark"] {
+    --bg: #1b1f1c; --surface: #23282a; --border: #353c38;
+    --text: #ece7dc; --text-soft: #bfb9ad; --muted: #8f8a7e;
+    --accent: #a7c29b; --accent-2: #eda4a8;
+    --chip-bg: #2e3431; --chip-text: #cfd9c7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    margin: 0; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background .4s ease, color .4s ease;
+  }
+  .font-display { font-family: 'Lora', Georgia, serif; letter-spacing: -0.005em; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  .bg-art { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .bg-art::before, .bg-art::after {
+    content: ''; position: absolute; width: 680px; height: 680px;
+    border-radius: 50%; filter: blur(120px);
+    transition: opacity .4s ease;
+  }
+  .bg-art::before { background: var(--accent); top: -240px; left: -200px; opacity: .28; }
+  .bg-art::after  { background: var(--accent-2); bottom: -260px; right: -180px; opacity: .32; }
+  [data-theme="dark"] .bg-art::before, [data-theme="dark"] .bg-art::after { opacity: .18; }
+
+  /* NAV */
+  header.nav {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(12px);
+    background: color-mix(in srgb, var(--bg) 75%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand {
+    font-family: 'Lora', serif; font-weight: 700; font-size: 20px;
+    color: var(--text); text-decoration: none; letter-spacing: -0.02em;
+  }
+  .brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 28px; list-style: none; padding: 0; margin: 0; }
+  .nav-links a {
+    color: var(--text-soft); text-decoration: none; font-size: 14.5px; font-weight: 500;
+    position: relative; transition: color .2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: -6px; width: 0; height: 2px;
+    background: var(--accent); border-radius: 2px; transition: width .3s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+  .theme-toggle {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface);
+    display: grid; place-items: center; cursor: pointer;
+    color: var(--text-soft);
+    transition: transform .25s ease, border-color .25s ease, color .2s;
+  }
+  .theme-toggle:hover { color: var(--text); border-color: var(--accent); transform: rotate(18deg); }
+  .theme-toggle svg { width: 18px; height: 18px; }
+  .theme-toggle .icon-sun { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+  /* HERO */
+  .hero { padding: 80px 0 80px; }
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: 0.22em; font-size: 12px;
+    color: var(--accent); font-weight: 600; margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: 'Lora', serif; font-weight: 600;
+    font-size: clamp(40px, 6.4vw, 72px); line-height: 1.06;
+    margin: 0 0 18px;
+  }
+  .hero-title em {
+    font-style: italic; font-weight: 600;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-dot { color: var(--accent); }
+  .hero-descriptors {
+    font-size: 14px; text-transform: uppercase; letter-spacing: .22em;
+    color: var(--muted); font-weight: 500; margin: 12px 0 16px;
+  }
+  .hero-sub {
+    font-size: 18.5px; color: var(--text-soft);
+    max-width: 580px; margin: 0 0 30px;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 24px;
+    font-size: 13.5px; color: var(--text-soft); margin-bottom: 30px;
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero-meta .dot-sep { color: var(--muted); }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 14.5px;
+    text-decoration: none; transition: transform .2s, background .2s, color .2s, border-color .2s;
+    border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { transform: translateY(-2px); background: var(--sage-600); }
+  [data-theme="dark"] .btn-primary { color: #1b1f1c; }
+  [data-theme="dark"] .btn-primary:hover { background: #bcd1b1; }
+  .btn-ghost { border-color: var(--border); color: var(--text); background: transparent; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  section { padding: 72px 0; }
+  .section-head { margin-bottom: 28px; }
+  .section-head h2 {
+    font-family: 'Lora', serif; font-weight: 600;
+    font-size: clamp(22px, 3vw, 28px); margin: 6px 0 0;
+  }
+  .section-head h2 em {
+    font-style: italic;
+    background: linear-gradient(120deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  /* ABOUT */
+  .about { max-width: 720px; font-size: 17px; color: var(--text-soft); }
+  .about p { margin: 0 0 16px; }
+  .about .lead {
+    color: var(--text); font-size: 20px;
+    font-family: 'Lora', serif; line-height: 1.4; margin-bottom: 20px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+  .chip {
+    background: var(--chip-bg); color: var(--chip-text);
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  /* EXPERIENCE - compact, sell-off style */
+  .xp-list-wrap { display: flex; flex-direction: column; gap: 32px; }
+  .xp-card {
+    padding-bottom: 28px; border-bottom: 1px solid var(--border);
+  }
+  .xp-card:last-child { border-bottom: none; }
+  .xp-role-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .xp-role-head h3 {
+    font-family: 'Lora', serif; font-size: 21px; margin: 0; color: var(--text);
+  }
+  .xp-role-head .co { color: var(--accent); font-weight: 600; }
+  .xp-date { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .xp-loc { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+  .xp-loc .tag {
+    display: inline-block; padding: 2px 10px; border-radius: 6px;
+    background: var(--chip-bg); color: var(--chip-text);
+    font-size: 11.5px; font-weight: 600; margin-right: 8px;
+    text-transform: uppercase; letter-spacing: .08em;
+  }
+  .xp-bullets { list-style: none; padding: 0; margin: 10px 0 0; }
+  .xp-bullets li {
+    position: relative; padding-left: 20px; margin-bottom: 8px;
+    color: var(--text-soft); font-size: 15px; line-height: 1.55;
+  }
+  .xp-bullets li::before {
+    content: '→'; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-weight: 700;
+  }
+  .xp-bullets strong { color: var(--text); font-weight: 600; }
+  .sub-role {
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px dashed var(--border);
+  }
+  .sub-role:first-of-type { margin-top: 8px; padding-top: 0; border-top: none; }
+  .sub-role-head {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px;
+    margin-bottom: 2px;
+  }
+  .sub-role-head h4 {
+    font-family: 'Lora', serif; font-size: 16.5px;
+    margin: 0; color: var(--text); font-weight: 600;
+  }
+
+  /* PROJECTS with photos */
+  .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 780px) { .projects { grid-template-columns: 1fr; } }
+  .project {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    display: flex; flex-direction: column;
+  }
+  .project:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    box-shadow: 0 18px 40px -24px color-mix(in srgb, var(--accent) 55%, transparent);
+  }
+  .project-thumb {
+    position: relative; height: 180px;
+    overflow: hidden;
+  }
+  .thumb-1 { background: linear-gradient(135deg, var(--sage-300), var(--pink-200)); }
+  .thumb-2 { background: linear-gradient(135deg, var(--pink-300), var(--sage-200)); }
+  .thumb-3 { background: linear-gradient(135deg, var(--sage-400), var(--pink-300)); }
+  .thumb-4 { background: linear-gradient(135deg, var(--pink-400), var(--sage-300)); }
+  .thumb-5 { background: linear-gradient(135deg, var(--sage-200), var(--pink-300)); }
+  .thumb-6 { background: linear-gradient(135deg, var(--pink-200), var(--sage-400)); }
+  .project-visit {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--accent); font-weight: 600; font-size: 14px;
+    text-decoration: none; margin-top: auto;
+    transition: color .2s, transform .2s;
+  }
+  .project-visit:hover { color: var(--accent-2); transform: translateX(3px); }
+  .project-ongoing {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: .1em;
+    padding: 3px 10px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    margin-bottom: 8px;
+  }
+  .project-ongoing::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); display: inline-block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(1.3); }
+  }
+  .project-thumb img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .5s ease;
+  }
+  .project:hover .project-thumb img { transform: scale(1.04); }
+  .project-thumb .thumb-label {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: 'Lora', serif;
+    font-size: 56px; font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    pointer-events: none;
+  }
+  .project-body { padding: 22px 24px 24px; flex: 1; display: flex; flex-direction: column; }
+  .project h3 {
+    font-family: 'Lora', serif; font-size: 19px; margin: 0 0 4px;
+    color: var(--text); line-height: 1.25;
+  }
+  .project .p-date { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+  .project p { color: var(--text-soft); font-size: 14.5px; margin: 0 0 14px; flex: 1; }
+
+  /* EDUCATION */
+  .edu-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; align-items: center;
+  }
+  .edu-card h3 { font-family: 'Lora', serif; margin: 0 0 4px; font-size: 22px; }
+  .edu-card .school { color: var(--accent); font-weight: 600; font-size: 15px; }
+  .edu-card .meta { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+  .edu-card .gpa {
+    background: var(--chip-bg); color: var(--chip-text);
+    padding: 10px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+    white-space: nowrap;
+  }
+
+  /* PUBLICATIONS - clickable cards */
+  .pub-list { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .pub-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 22px 24px;
+    text-decoration: none; color: inherit; display: block;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    position: relative;
+  }
+  .pub-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    box-shadow: 0 10px 30px -20px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .pub-card .pub-title {
+    font-family: 'Lora', serif; font-size: 17.5px;
+    color: var(--text); line-height: 1.4; margin: 0 0 8px;
+    padding-right: 30px;
+  }
+  .pub-card .pub-meta {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    font-size: 13.5px; color: var(--muted);
+  }
+  .pub-card .pub-journal { color: var(--accent); font-weight: 600; }
+  .pub-card::after {
+    content: '↗'; position: absolute; top: 22px; right: 24px;
+    color: var(--accent); font-size: 20px; font-weight: 500;
+    transition: transform .2s;
+  }
+  .pub-card:hover::after { transform: translate(3px, -3px); }
+
+  /* CERTIFICATIONS - grouped chips */
+  .cert-groups { display: flex; flex-direction: column; gap: 20px; }
+  .cert-group-label {
+    font-family: 'Lora', serif; font-size: 15px; font-weight: 600;
+    color: var(--text); margin: 0 0 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cert-group-label .cert-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--accent); font-size: 14px; flex-shrink: 0;
+  }
+  .cert-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cert-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--chip-bg); color: var(--chip-text);
+    padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+    border: 1px solid color-mix(in srgb, var(--accent) 15%, transparent);
+    transition: border-color .2s, transform .2s;
+    text-decoration: none; cursor: pointer;
+  }
+  .cert-chip:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    transform: translateY(-1px);
+    color: var(--accent);
+  }
+  .cert-chip .cert-yr {
+    font-size: 11px; color: var(--muted); font-weight: 400;
+  }
+  .cert-count {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13.5px; color: var(--muted); margin-top: 4px;
+  }
+  .cert-count strong { color: var(--text); font-weight: 600; }
+
+  /* CONTACT */
+  .contact-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 28px; padding: 56px 32px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .contact-card::before, .contact-card::after {
+    content: ''; position: absolute;
+    width: 280px; height: 280px; border-radius: 50%;
+    filter: blur(80px); opacity: .4;
+  }
+  .contact-card::before { background: var(--accent); top: -100px; left: -80px; }
+  .contact-card::after  { background: var(--accent-2); bottom: -100px; right: -80px; }
+  [data-theme="dark"] .contact-card::before,
+  [data-theme="dark"] .contact-card::after { opacity: .25; }
+  .contact-card > * { position: relative; }
+  .contact-card p { color: var(--text-soft); max-width: 520px; margin: 12px auto 28px; }
+
+  footer {
+    padding: 28px 0 40px; color: var(--muted); font-size: 13px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    border-top: 1px solid var(--border); margin-top: 40px;
+  }
+
+  /* CURRENTLY line */
+  .currently {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--accent); font-weight: 500;
+    padding: 8px 16px; border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    margin: 0 0 24px;
+  }
+  .currently::before {
+    content: ''; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); display: inline-block; flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    margin-top: 48px; color: var(--muted); font-size: 12px;
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+  .scroll-hint svg {
+    width: 20px; height: 20px;
+    animation: bobDown 2s ease-in-out infinite;
+  }
+  @keyframes bobDown {
+    0%, 100% { transform: translateY(0); opacity: .6; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  /* HAMBURGER MENU */
+  .hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    color: var(--text-soft); padding: 4px; margin-left: 12px;
+  }
+  .hamburger svg { width: 24px; height: 24px; }
+  @media (max-width: 820px) {
+    .hamburger { display: block; }
+    .nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; gap: 0; padding: 12px 24px 20px;
+      background: color-mix(in srgb, var(--bg) 95%, transparent);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 10px 0; font-size: 16px; }
+    .nav-links a::after { display: none; }
+  }
+
+  /* FOOTER SOCIAL */
+  .footer-social { display: flex; gap: 12px; align-items: center; }
+  .footer-social a {
+    display: grid; place-items: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--border); color: var(--muted);
+    text-decoration: none; transition: color .2s, border-color .2s;
+  }
+  .footer-social a:hover { color: var(--accent); border-color: var(--accent); }
+  .footer-social svg { width: 16px; height: 16px; }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+  <div class="bg-art" aria-hidden="true"></div>
+
+  <header class="nav">
+    <div class="container">
+      <nav>
+        <a href="#top" class="brand">Intan<span>.</span>Puspita</a>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#writing">Writing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div style="display:flex;align-items:center;">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+        <button id="menuToggle" class="hamburger" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" class="hero">
+    <div class="container reveal">
+      <h1 class="hero-title">Intan Puspita<span class="hero-dot">.</span></h1>
+      <p class="hero-descriptors">Adaptive. Curious. Grounded.</p>
+      <p class="hero-sub">I thrive in the space between structure and people — figuring things out, one day at a time.</p>
+      <p class="currently">Currently exploring public archaeology — how museums and heritage can reach the general public.</p>
+      <div class="hero-meta">
+        <span>📍 Jakarta, Indonesia</span>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#experience">See my work</a>
+        <a class="btn btn-ghost" href="#contact">Say hello →</a>
+      </div>
+      <div class="scroll-hint">
+        <span>scroll</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">About</p>
+        <h2>A bit <em>about me</em></h2>
+      </div>
+      <div class="about reveal">
+        <p class="lead">Archaeologist turned operations specialist. I find the patterns in data, the gaps in workflows, and the small fixes that make everything run smoother.</p>
+        <p>Today I lead operations at MEKAR, an Indonesian lending fintech — owning loan disbursement, borrower data, and cross-functional coordination between Sales, Collections, Finance, and external partners. Before this, I was in e-commerce customer operations and, before that, excavating prehistoric sites across Java with UGM.</p>
+        <p>The common thread: attention to detail, curiosity, and patience with complex systems. I'm most at home where people, process, and product meet.</p>
+        <div class="chips">
+          <span class="chip">Operations Management</span>
+          <span class="chip">Fintech / Lending</span>
+          <span class="chip">Workflow Optimization</span>
+          <span class="chip">Data Integrity</span>
+          <span class="chip">Cross-functional Coordination</span>
+          <span class="chip">Team Lead</span>
+          <span class="chip">Reporting &amp; Analysis</span>
+          <span class="chip">Microsoft Excel</span>
+          <span class="chip">Regulatory Compliance</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Experience</p>
+        <h2>Where I've <em>delivered</em></h2>
+      </div>
+      <div class="xp-list-wrap reveal">
+
+        <!-- MEKAR -->
+        <div class="xp-card">
+          <div class="xp-role-head">
+            <h3><span class="co">MEKAR</span> · PT. Mekar Investama Teknologi</h3>
+            <span class="xp-date">Jul 2024 — Present · 1 yr 10 mo</span>
+          </div>
+          <div class="xp-loc"><span class="tag">Fintech</span>Jakarta Selatan, Indonesia · Full-time</div>
+
+          <div class="sub-role">
+            <div class="sub-role-head">
+              <h4>Operations Supervisor</h4>
+              <span class="xp-date">Dec 2025 — Present</span>
+            </div>
+            <ul class="xp-bullets">
+              <li>Lead a <strong>small operations team</strong> managing end-to-end lending workflows across multiple products.</li>
+              <li>Own workflow standards, compliance checks, and daily disbursement performance.</li>
+            </ul>
+          </div>
+
+          <div class="sub-role">
+            <div class="sub-role-head">
+              <h4>Senior Operations Officer</h4>
+              <span class="xp-date">Apr 2025 — Dec 2025 · 9 mo</span>
+            </div>
+            <ul class="xp-bullets">
+              <li>Directed <strong>daily loan disbursement</strong> across multiple lending products with full regulatory compliance.</li>
+              <li><strong>Standardized workflows</strong> — reduced processing errors and improved turnaround time.</li>
+              <li>Coordinated Sales, Collections, Finance, and external partners for seamless operational execution.</li>
+              <li>Managed and optimized large-scale <strong>borrower databases</strong>, improving data integrity and usability.</li>
+              <li>Supervised and mentored a mini operations team; delegated, monitored performance, and supported training.</li>
+            </ul>
+          </div>
+
+          <div class="sub-role">
+            <div class="sub-role-head">
+              <h4>Business Support</h4>
+              <span class="xp-date">Jul 2024 — Mar 2025 · 9 mo</span>
+            </div>
+            <ul class="xp-bullets">
+              <li>Maintained accurate records for <strong>5,000+ borrower entries</strong> with full data integrity and compliance.</li>
+              <li>Coordinated with <strong>10+ external partners</strong> for disbursement and reporting workflows.</li>
+              <li>Built a structured <strong>tracking &amp; reporting system</strong> — improved visibility, reduced loan disbursement errors.</li>
+              <li>Recognized for accuracy and timeliness; reduced disbursement delays and improved team efficiency.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- SHOPEE -->
+        <div class="xp-card">
+          <div class="xp-role-head">
+            <h3>Customer Operations · <span class="co">Shopee</span></h3>
+            <span class="xp-date">Oct 2023 — Dec 2023 · 3 mo</span>
+          </div>
+          <div class="xp-loc"><span class="tag">E-commerce</span>Yogyakarta, Indonesia · Contract</div>
+          <ul class="xp-bullets">
+            <li>Handled <strong>50–70 customer calls daily</strong> — complaints, inquiries, and escalations — in a high-volume call center.</li>
+            <li>Delivered timely resolutions while maintaining high CSAT and empathy in communication.</li>
+            <li>Partnered with internal teams to escalate and resolve complex cases; documented for service improvement.</li>
+          </ul>
+        </div>
+
+        <!-- UGM LAB -->
+        <div class="xp-card">
+          <div class="xp-role-head">
+            <h3>Student Intern · <span class="co">Lab. Bio-Paleoantropologi UGM</span></h3>
+            <span class="xp-date">Nov 2022 — Dec 2022 · 2 mo</span>
+          </div>
+          <div class="xp-loc"><span class="tag">Research</span>Yogyakarta, Indonesia</div>
+          <ul class="xp-bullets">
+            <li>Analyzed human skeletal remains (bones &amp; teeth) from active archaeological sites.</li>
+            <li>Documented &amp; archived findings for academic reference; supported museum conservation.</li>
+            <li>Acted as museum guide, leading educational tours for public visitors.</li>
+          </ul>
+        </div>
+
+        <!-- SANGIRAN -->
+        <div class="xp-card">
+          <div class="xp-role-head">
+            <h3>Field Archaeologist · <span class="co">BPSMP Sangiran</span></h3>
+            <span class="xp-date">Sep 2022 — Oct 2022 · 2 mo</span>
+          </div>
+          <div class="xp-loc"><span class="tag">UNESCO Site</span>Sragen, Central Java</div>
+          <ul class="xp-bullets">
+            <li>Surveyed and excavated designated areas at the Sangiran region (UNESCO World Heritage site).</li>
+            <li>Managed excavation documentation — site notes, photography, and digital data collection.</li>
+            <li><strong>Key finding:</strong> excavated and identified a rib fragment of a <em>Stegodon</em>, an extinct prehistoric elephant.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Selected projects</p>
+        <h2>Things I've <em>worked on</em></h2>
+      </div>
+      <div class="projects">
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-5">
+            <span class="thumb-label">01</span>
+            <img src="images/projects/tiktok.jpg" alt="@berryberrykoo TikTok" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <span class="project-ongoing">Ongoing</span>
+            <h3>@berryberrykoo on TikTok</h3>
+            <div class="p-date">Personal project · 2025 — Present</div>
+            <p>Uploading museum and exhibition content to share archaeology and cultural heritage with a wider audience. Learning short-form video, narrative, and storytelling along the way.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Content Creation</span>
+              <span class="chip">Storytelling</span>
+              <span class="chip">Heritage</span>
+            </div>
+            <a class="project-visit" href="https://www.tiktok.com/@berryberrykoo" target="_blank" rel="noopener">Watch on TikTok →</a>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-6">
+            <span class="thumb-label">02</span>
+            <img src="images/projects/medium.jpg" alt="goldenrodiary on Medium" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <span class="project-ongoing">Ongoing</span>
+            <h3>goldenrodiary on Medium</h3>
+            <div class="p-date">Personal project · 2025 — Present</div>
+            <p>A quiet corner of the internet where I write about culture — and slowly branching into music, exhibitions, and self-development. A space to think out loud.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Culture</span>
+              <span class="chip">Music</span>
+              <span class="chip">Self-development</span>
+            </div>
+            <a class="project-visit" href="https://medium.com/@intanpuspitaa77_86220" target="_blank" rel="noopener">Read on Medium →</a>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-1">
+            <span class="thumb-label">03</span>
+            <img src="images/projects/inaf.jpg" alt="Indonesian Archaeology Field School" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <h3>Indonesian Archaeology Field School</h3>
+            <div class="p-date">Jul — Aug 2023 · UGM × Australian National University</div>
+            <p>Collaboration exploring Goa Bangkang, Lombok. Conducted excavation via the spit method, plotted findings with Total Station, sorted artifacts via dry &amp; wet sieving.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Excavation</span>
+              <span class="chip">Documentation</span>
+              <span class="chip">Report Writing</span>
+            </div>
+            <a class="project-visit" href="https://arkeologi.fib.ugm.ac.id/2025/06/05/prehistoric-archaeology-field-school-in-lombok-in-2023/" target="_blank" rel="noopener">Read the article →</a>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-2">
+            <span class="thumb-label">04</span>
+            <img src="images/projects/hikayat-padi.jpg" alt="Virtual Exhibition: Hikayat Padi" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <h3>Virtual Exhibition: Hikayat Padi</h3>
+            <div class="p-date">Mar — Jun 2022 · UGM</div>
+            <p>Final project for Exhibition Concept. Designed the storyline, curated the collection, and built the virtual exhibit using Artsteps.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Curation</span>
+              <span class="chip">Creative Concept</span>
+              <span class="chip">Artsteps</span>
+            </div>
+            <a class="project-visit" href="https://www.artsteps.com/view/627a86ab688f9e9e9bdcd6b3" target="_blank" rel="noopener">View exhibition →</a>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-3">
+            <span class="thumb-label">05</span>
+            <img src="images/projects/arkeopreneurship.jpg" alt="Arkeopreneurship" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <h3>Arkeopreneurship</h3>
+            <div class="p-date">Sep — Nov 2021 · UGM</div>
+            <p>Heritage-based "one-set fashion" product — concept, mock-up, brand identity, promo plan, and pricing strategy built with a student team.</p>
+            <div class="chips" style="margin:0;">
+              <span class="chip">Teamwork</span>
+              <span class="chip">Brand Design</span>
+              <span class="chip">Product Strategy</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-4">
+            <span class="thumb-label">06</span>
+            <img src="images/projects/banyunibo.jpg" alt="Banyunibo Temple Community Service" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <h3>Banyunibo Temple Community Service</h3>
+            <div class="p-date">Mar — Nov 2021 · UGM</div>
+            <p>Wrote a published article on digital promotion of batik as cultural preservation; produced promo footage for @sobobanyunibo and designed outreach programs.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Article Writing</span>
+              <span class="chip">Promotion</span>
+              <span class="chip">Community</span>
+            </div>
+            <a class="project-visit" href="https://journal.ugm.ac.id/v3/BAKTI/article/view/4074" target="_blank" rel="noopener">Read the article →</a>
+          </div>
+        </article>
+
+        <article class="project reveal">
+          <div class="project-thumb thumb-1">
+            <span class="thumb-label">07</span>
+            <img src="images/projects/arkeotrendnews.jpg" alt="Arkeotrendnews on Medium" loading="lazy" onerror="this.remove()" />
+          </div>
+          <div class="project-body">
+            <h3>Arkeotrendnews</h3>
+            <div class="p-date">Apr — Jul 2021 · UGM · Public Archaeology course</div>
+            <p>A team mini-project for the Arkeologi Publik course — we wrote and published articles on Medium to make archaeology more accessible to the general public.</p>
+            <div class="chips" style="margin: 0 0 14px;">
+              <span class="chip">Public Archaeology</span>
+              <span class="chip">Article Writing</span>
+              <span class="chip">Teamwork</span>
+            </div>
+            <a class="project-visit" href="https://medium.com/@Arkeotrendnews" target="_blank" rel="noopener">Read on Medium →</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Education</p>
+        <h2>Where I <em>studied</em></h2>
+      </div>
+      <div class="edu-card reveal">
+        <div>
+          <h3>Bachelor's degree, Archaeology</h3>
+          <div class="school">Universitas Gadjah Mada (UGM)</div>
+          <div class="meta">Aug 2019 — Aug 2023</div>
+        </div>
+        <div class="gpa">GPA 3.67 / 4.00 · Cumlaude</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="writing">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Publications</p>
+        <h2>Writing &amp; <em>research</em></h2>
+      </div>
+      <div class="pub-list reveal">
+        <a class="pub-card" href="https://ejournal.brin.go.id/berkalaarkeologi/article/view/11355" target="_blank" rel="noopener">
+          <div class="pub-title">Tinjauan Kembali Temuan Butir Pati Triticeae pada Kalkulus Gigi Rangka Manusia Situs Plawangan, Rembang</div>
+          <div class="pub-meta">
+            <span class="pub-journal">BRIN Publishing</span>
+            <span>·</span>
+            <span>19 Nov 2025</span>
+          </div>
+        </a>
+        <a class="pub-card" href="https://journal.ugm.ac.id/v3/BAKTI/article/view/4074" target="_blank" rel="noopener">
+          <div class="pub-title">Penggunaan Wahana Digital dalam Promosi dan Pemasaran Batik sebagai Kontekstualisasi Pelestarian Cagar Budaya</div>
+          <div class="pub-meta">
+            <span class="pub-journal">Bakti Budaya</span>
+            <span>·</span>
+            <span>28 Apr 2022</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS (photos only) -->
+  <section id="certs">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Certifications</p>
+        <h2>Always <em>learning</em></h2>
+      </div>
+      <div class="cert-groups reveal">
+
+        <!-- Data & AI -->
+        <div>
+          <p class="cert-group-label"><span class="cert-icon">📊</span> Data & AI</p>
+          <div class="cert-chips">
+            <a class="cert-chip" href="images/certs/prevent-data-loss.jpg" target="_blank" rel="noopener">Prevent Data Loss · Microsoft <span class="cert-yr">2026</span></a>
+            <a class="cert-chip" href="images/certs/data-insights-ai.jpg" target="_blank" rel="noopener">Data Insights with AI · Microsoft <span class="cert-yr">2026</span></a>
+            <a class="cert-chip" href="images/certs/data-analytics.jpg" target="_blank" rel="noopener">Data Analytics · Microsoft <span class="cert-yr">2025</span></a>
+            <a class="cert-chip" href="images/certs/data-concepts.jpg" target="_blank" rel="noopener">Data Concepts · Microsoft <span class="cert-yr">2025</span></a>
+          </div>
+        </div>
+
+        <!-- Business & Marketing -->
+        <div>
+          <p class="cert-group-label"><span class="cert-icon">💼</span> Business & Marketing</p>
+          <div class="cert-chips">
+            <a class="cert-chip" href="images/certs/business-communications.jpg" target="_blank" rel="noopener">Internal Business Communications · Coursera <span class="cert-yr">2025</span></a>
+            <a class="cert-chip" href="images/certs/ai-growth-marketing.jpg" target="_blank" rel="noopener">AI Growth Marketing · Starweaver <span class="cert-yr">2025</span></a>
+          </div>
+        </div>
+
+        <!-- Security & Digital Literacy -->
+        <div>
+          <p class="cert-group-label"><span class="cert-icon">🔐</span> Security & Digital</p>
+          <div class="cert-chips">
+            <a class="cert-chip" href="images/certs/security-awareness.jpg" target="_blank" rel="noopener">Security Awareness · Ethic Ninja <span class="cert-yr">2025</span></a>
+            <a class="cert-chip" href="images/certs/critical-thinking.jpg" target="_blank" rel="noopener">Critical Thinking & Digital Literacy · AYO Academy <span class="cert-yr">2025</span></a>
+            <a class="cert-chip" href="images/certs/humanidades-digitales.jpg" target="_blank" rel="noopener">Humanidades Digitales · UAB <span class="cert-yr">2024</span></a>
+          </div>
+        </div>
+
+        <!-- Language -->
+        <div>
+          <p class="cert-group-label"><span class="cert-icon">🌐</span> Language</p>
+          <div class="cert-chips">
+            <a class="cert-chip" href="images/certs/toefl-itp.jpg" target="_blank" rel="noopener">TOEFL ITP · ETS <span class="cert-yr">2024</span></a>
+            <a class="cert-chip" href="images/certs/first-step-korean.jpg" target="_blank" rel="noopener">First Step Korean · Yonsei <span class="cert-yr">2024</span></a>
+          </div>
+        </div>
+
+        <p class="cert-count"><strong>11</strong> certifications and counting.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-card reveal">
+        <p class="eyebrow">Contact</p>
+        <h2 class="font-display" style="font-size: clamp(32px, 4.2vw, 44px); margin:0;">
+          Let's talk about <em style="font-style: italic; background: linear-gradient(120deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent;">people, process &amp; product</em>.
+        </h2>
+        <p>Got an idea, a role, or just want to say hi? My inbox is always open.</p>
+        <div class="btn-row" style="justify-content: center;">
+          <a class="btn btn-primary" href="mailto:intanpuspitaa77@gmail.com">Email me</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/intan-puspita-249358232/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <footer>
+      <div>
+        <span>© <span id="year"></span> Intan Puspita</span>
+        <span style="display:block;margin-top:4px;font-size:12px;">Where people, process, and product meet.</span>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/in/intan-puspita-249358232/" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@berryberrykoo" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+        </a>
+        <a href="https://medium.com/@intanpuspitaa77_86220" target="_blank" rel="noopener" aria-label="Medium">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+        </a>
+        <a href="mailto:intanpuspitaa77@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', () => {
+    const current = document.documentElement.dataset.theme;
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  });
+
+  // Hamburger menu
+  const menuBtn = document.getElementById('menuToggle');
+  const navLinks = document.querySelector('.nav-links');
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Hide scroll hint on scroll
+  const scrollHint = document.querySelector('.scroll-hint');
+  if (scrollHint) {
+    let hidden = false;
+    window.addEventListener('scroll', () => {
+      if (!hidden && window.scrollY > 100) {
+        scrollHint.style.opacity = '0';
+        scrollHint.style.transition = 'opacity .5s ease';
+        hidden = true;
+      }
+    });
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
