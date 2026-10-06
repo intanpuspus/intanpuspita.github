@@ -149,11 +149,11 @@
   flex-wrap: wrap;
 }
 .hero-text { flex: 1 1 480px; }
-.hero-photo {
+.h.hero-photo {
   flex: 0 0 auto;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;          /* circle — use 16px for rounded square, 0 for rectangle */
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
   object-fit: cover;
   object-position: center top;
   border: 3px solid var(--border);
@@ -162,7 +162,22 @@
 @media (max-width: 720px) {
   .hero .container { flex-direction: column-reverse; text-align: center; }
   .hero-meta, .btn-row { justify-content: center; }
-  .hero-photo { width: 160px; height: 160px; }
+  .hero-photo { width: 48px; height: 48px; }
+}
+  .hero-photo {
+  flex: 0 0 auto;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+@media (max-width: 720px) {
+  .hero .container { flex-direction: column-reverse; text-align: center; }
+  .hero-meta, .btn-row { justify-content: center; }
+  .hero-photo { width: 48px; height: 48px; }
 }
   
   section { padding: 72px 0; }
@@ -525,7 +540,7 @@
       </div>
     </div>
 
-      <img src=images/profile.jpg" alt="Intan Puspita" class="hero-photo" />
+      <img src=images/profile.JPG" alt="Intan Puspita" class="hero-photo" />
       
       <div class="scroll-hint">
         <span>scroll</span>
