@@ -151,8 +151,8 @@
 .hero-text { flex: 1 1 480px; }
 .h.hero-photo {
   flex: 0 0 auto;
-  width: 66px;
-  height: 66px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center top;
@@ -162,22 +162,7 @@
 @media (max-width: 720px) {
   .hero .container { flex-direction: column-reverse; text-align: center; }
   .hero-meta, .btn-row { justify-content: center; }
-  .hero-photo { width: 48px; height: 48px; }
-}
-  .hero-photo {
-  flex: 0 0 auto;
-  width: 66px;
-  height: 66px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center top;
-  border: 3px solid var(--border);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-}
-@media (max-width: 720px) {
-  .hero .container { flex-direction: column-reverse; text-align: center; }
-  .hero-meta, .btn-row { justify-content: center; }
-  .hero-photo { width: 48px; height: 48px; }
+  .hero-photo { width: 120px; height: 120px; }
 }
   
   section { padding: 72px 0; }
@@ -528,20 +513,20 @@
   <section id="top" class="hero">
     <div class="container reveal">
       <div class="hero-text">
-      <h1 class="hero-title">Intan Puspita<span class="hero-dot">.</span></h1>
-      <p class="hero-sub">I thrive in the space between structure and people — figuring things out, one day at a time.</p>
-      <p class="currently">Currently exploring public archaeology — how cultural heritage can reach the general public.</p>
-      <div class="hero-meta">
-        <span>📍 Jakarta, Indonesia</span>
+        <h1 class="hero-title">Intan Puspita<span class="hero-dot">.</span></h1>
+        <p class="hero-sub">I thrive in the space between structure and people — figuring things out, one day at a time.</p>
+        <p class="currently">Currently exploring public archaeology — how cultural heritage can reach the general public.</p>
+        <div class="hero-meta">
+          <span>📍 Jakarta, Indonesia</span>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#experience">See my work</a>
+          <a class="btn btn-ghost" href="#contact">Say hello →</a>
+        </div>
       </div>
-      <div class="btn-row">
-        <a class="btn btn-primary" href="#experience">See my work</a>
-        <a class="btn btn-ghost" href="#contact">Say hello →</a>
-      </div>
-    </div>
 
-      <img src=images/profile.JPG" alt="Intan Puspita" class="hero-photo" />
-      
+      <img src="images/profile.JPG" alt="Intan Puspita" class="hero-photo" />
+
       <div class="scroll-hint">
         <span>scroll</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
