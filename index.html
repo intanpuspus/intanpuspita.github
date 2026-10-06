@@ -141,6 +141,30 @@
   .btn-ghost { border-color: var(--border); color: var(--text); background: transparent; }
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
+  .hero .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.hero-text { flex: 1 1 480px; }
+.hero-photo {
+  flex: 0 0 auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;          /* circle — use 16px for rounded square, 0 for rectangle */
+  object-fit: cover;
+  object-position: center top;
+  border: 3px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+@media (max-width: 720px) {
+  .hero .container { flex-direction: column-reverse; text-align: center; }
+  .hero-meta, .btn-row { justify-content: center; }
+  .hero-photo { width: 160px; height: 160px; }
+}
+  
   section { padding: 72px 0; }
   .section-head { margin-bottom: 28px; }
   .section-head h2 {
@@ -488,6 +512,7 @@
   <!-- HERO -->
   <section id="top" class="hero">
     <div class="container reveal">
+      <div class="hero-text">
       <h1 class="hero-title">Intan Puspita<span class="hero-dot">.</span></h1>
       <p class="hero-sub">I thrive in the space between structure and people — figuring things out, one day at a time.</p>
       <p class="currently">Currently exploring public archaeology — how cultural heritage can reach the general public.</p>
@@ -498,6 +523,10 @@
         <a class="btn btn-primary" href="#experience">See my work</a>
         <a class="btn btn-ghost" href="#contact">Say hello →</a>
       </div>
+    </div>
+
+      <img src=images/profile.jpg" alt="Intan Puspita" class="hero-photo" />
+      
       <div class="scroll-hint">
         <span>scroll</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
